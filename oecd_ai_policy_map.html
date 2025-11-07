@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OECD AI Policy Initiatives Map</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.95;
+        }
+        
+        .content {
+            display: grid;
+            grid-template-columns: 350px 1fr;
+            gap: 0;
+        }
+        
+        .sidebar {
+            background: #f8f9fa;
+            padding: 30px;
+            border-right: 1px solid #e0e0e0;
+            max-height: 800px;
+            overflow-y: auto;
+        }
+        
+        .sidebar h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+        }
+        
+        .stats {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .stat-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .stat-item:last-child {
+            border-bottom: none;
+        }
+        
+        .stat-label {
+            font-weight: 500;
+            color: #555;
+        }
+        
+        .stat-value {
+            font-weight: bold;
+            color: #667eea;
+            font-size: 1.1em;
+        }
+        
+        .country-list {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .country-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px;
+            margin-bottom: 8px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            background: #f8f9fa;
+        }
+        
+        .country-item:hover {
+            background: #667eea;
+            color: white;
+            transform: translateX(5px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+        
+        .country-name {
+            font-weight: 500;
+            flex-grow: 1;
+        }
+        
+        .country-count {
+            background: #667eea;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+        
+        .country-item:hover .country-count {
+            background: white;
+            color: #667eea;
+        }
+        
+        .map-container {
+            padding: 40px;
+            background: white;
+        }
+        
+        .map-placeholder {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border-radius: 15px;
+            padding: 60px;
+            text-align: center;
+            min-height: 600px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .map-icon {
+            font-size: 100px;
+            margin-bottom: 20px;
+            opacity: 0.6;
+        }
+        
+        .map-placeholder h2 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 2em;
+        }
+        
+        .map-placeholder p {
+            color: #666;
+            font-size: 1.1em;
+            max-width: 600px;
+            line-height: 1.6;
+        }
+        
+        .legend {
+            margin-top: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+        
+        .legend h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+        
+        .legend-scale {
+            display: flex;
+            height: 30px;
+            border-radius: 5px;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+        
+        .legend-scale div {
+            flex: 1;
+        }
+        
+        .legend-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9em;
+            color: #666;
+        }
+        
+        .footer {
+            background: #f8f9fa;
+            padding: 25px;
+            text-align: center;
+            color: #666;
+            border-top: 1px solid #e0e0e0;
+        }
+        
+        @media (max-width: 1024px) {
+            .content {
+                grid-template-columns: 1fr;
+            }
+            
+            .sidebar {
+                max-height: none;
+                border-right: none;
+                border-bottom: 1px solid #e0e0e0;
+            }
+        }
+        
+        /* Scrollbar styling */
+        .sidebar::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        .sidebar::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+        
+        .sidebar::-webkit-scrollbar-thumb {
+            background: #667eea;
+            border-radius: 10px;
+        }
+        
+        .sidebar::-webkit-scrollbar-thumb:hover {
+            background: #5568d3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🌍 OECD AI Policy Initiatives Dashboard</h1>
+            <p>Global Overview of AI Policy Initiatives by Country</p>
+        </div>
+        
+        <div class="content">
+            <div class="sidebar">
+                <div class="stats">
+                    <h2>📊 Key Statistics</h2>
+                    <div class="stat-item">
+                        <span class="stat-label">Total Countries</span>
+                        <span class="stat-value" id="total-countries">69</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Total Policies</span>
+                        <span class="stat-value" id="total-policies">557</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Average per Country</span>
+                        <span class="stat-value" id="avg-policies">8.1</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Highest</span>
+                        <span class="stat-value" id="max-policies">44</span>
+                    </div>
+                </div>
+                
+                <div class="country-list">
+                    <h2>🏆 Top Countries</h2>
+                    <div id="country-rankings">
+                        <div class="country-item">
+                            <span class="country-name">Austria</span>
+                            <span class="country-count">44</span>
+                        </div>
+                        <div class="country-item">
+                            <span class="country-name">Saudi Arabia</span>
+                            <span class="country-count">44</span>
+                        </div>
+                        <div class="country-item">
+                            <span class="country-name">Ukraine</span>
+                            <span class="country-count">33</span>
+                        </div>
+                        <div class="country-item">
+                            <span class="country-name">Portugal</span>
+                            <span class="country-count">23</span>
+                        </div>
+                        <div class="country-item">
+                            <span class="country-name">Singapore</span>
+                            <span class="country-count">22</span>
+                        </div>
+                        <div class="country-item">
+                            <span class="country-name">Slovenia</span>
+                            <span class="country-count">20</span>
+                        </div>
+                        <div class="country-item">
+                            <span class="country-name">India</span>
+                            <span class="country-count">17</span>
+                        </div>
+                        <div class="country-item">
+                            <span class="country-name">France</span>
+                            <span class="country-count">16</span>
+                        </div>
+                        <div class="country-item">
+                            <span class="country-name">United States</span>
+                            <span class="country-count">16</span>
+                        </div>
+                        <div class="country-item">
+                            <span class="country-name">Denmark</span>
+                            <span class="country-count">15</span>
+                        </div>
+                        <div class="country-item">
+                            <span class="country-name">Latvia</span>
+                            <span class="country-count">15</span>
+                        </div>
+                        <div class="country-item">
+                            <span class="country-name">Germany</span>
+                            <span class="country-count">14</span>
+                        </div>
+                        <div class="country-item">
+                            <span class="country-name">United Kingdom</span>
+                            <span class="country-count">12</span>
+                        </div>
+                        <div class="country-item">
+                            <span class="country-name">Greece</span>
+                            <span class="country-count">12</span>
+                        </div>
+                        <div class="country-item">
+                            <span class="country-name">Belgium</span>
+                            <span class="country-count">12</span>
+                        </div>
+                        <div class="country-item">
+                            <span class="country-name">Czechia</span>
+                            <span class="country-count">12</span>
+                        </div>
+                        <div class="country-item">
+                            <span class="country-name">Colombia</span>
+                            <span class="country-count">12</span>
+                        </div>
+                        <div class="country-item">
+                            <span class="country-name">Australia</span>
+                            <span class="country-count">11</span>
+                        </div>
+                        <div class="country-item">
+                            <span class="country-name">Malta</span>
+                            <span class="country-count">11</span>
+                        </div>
+                        <div class="country-item">
+                            <span class="country-name">Italy</span>
+                            <span class="country-count">11</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="map-container">
+                <div class="map-placeholder">
+                    <div class="map-icon">🗺️</div>
+                    <h2>Interactive World Map</h2>
+                    <p>This is where an interactive map would be displayed. To create a fully interactive map with color-coded countries, you can use libraries like:</p>
+                    <ul style="text-align: left; margin-top: 20px; font-size: 1.1em;">
+                        <li><strong>Plotly</strong> - Creates interactive choropleth maps</li>
+                        <li><strong>Folium</strong> - Beautiful maps with markers and tooltips</li>
+                        <li><strong>D3.js</strong> - Custom interactive visualizations</li>
+                    </ul>
+                    <p style="margin-top: 20px; font-style: italic;">Run the Python script with map libraries installed to generate the interactive version!</p>
+                </div>
+                
+                <div class="legend">
+                    <h3>Policy Count Scale</h3>
+                    <div class="legend-scale">
+                        <div style="background: #fee5d9;"></div>
+                        <div style="background: #fcbba1;"></div>
+                        <div style="background: #fc9272;"></div>
+                        <div style="background: #fb6a4a;"></div>
+                        <div style="background: #ef3b2c;"></div>
+                        <div style="background: #cb181d;"></div>
+                        <div style="background: #99000d;"></div>
+                    </div>
+                    <div class="legend-labels">
+                        <span>0-5</span>
+                        <span>6-10</span>
+                        <span>11-15</span>
+                        <span>16-20</span>
+                        <span>21-30</span>
+                        <span>31-40</span>
+                        <span>40+</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p><strong>Data Source:</strong> OECD.AI Policy Observatory</p>
+            <p style="margin-top: 10px;">Generated: 2025-11-05 15:30:30</p>
+        </div>
+    </div>
+    
+    <script>
+        // Add interactivity
+        document.querySelectorAll('.country-item').forEach(item => {
+            item.addEventListener('click', function() {
+                const country = this.querySelector('.country-name').textContent;
+                const count = this.querySelector('.country-count').textContent;
+                alert(`${country} has ${count} AI policy initiatives`);
+            });
+        });
+    </script>
+</body>
+</html>

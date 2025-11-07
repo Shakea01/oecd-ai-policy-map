@@ -1,0 +1,155 @@
+
+<!-- OECD AI Policy Map - Embeddable Widget -->
+<div id="oecd-ai-map-widget" style="width: 100%; max-width: 1200px; margin: 0 auto;">
+  <style>
+    #oecd-ai-map-widget {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    }
+    
+    #oecd-ai-map-widget .widget-header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 30px;
+      text-align: center;
+      border-radius: 10px 10px 0 0;
+    }
+    
+    #oecd-ai-map-widget .widget-header h2 {
+      margin: 0 0 10px 0;
+      font-size: 1.8em;
+    }
+    
+    #oecd-ai-map-widget .widget-content {
+      background: white;
+      padding: 30px;
+      border: 1px solid #e0e0e0;
+      border-top: none;
+      border-radius: 0 0 10px 10px;
+    }
+    
+    #oecd-ai-map-widget .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+    
+    #oecd-ai-map-widget .stat-card {
+      background: #f8f9fa;
+      padding: 20px;
+      border-radius: 8px;
+      text-align: center;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    #oecd-ai-map-widget .stat-label {
+      color: #666;
+      font-size: 0.9em;
+      margin-bottom: 5px;
+    }
+    
+    #oecd-ai-map-widget .stat-value {
+      color: #667eea;
+      font-size: 2em;
+      font-weight: bold;
+    }
+    
+    #oecd-ai-map-widget .country-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 15px;
+      margin-top: 20px;
+    }
+    
+    #oecd-ai-map-widget .country-card {
+      background: #f8f9fa;
+      padding: 15px;
+      border-radius: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+    
+    #oecd-ai-map-widget .country-card:hover {
+      background: #667eea;
+      color: white;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+    }
+    
+    #oecd-ai-map-widget .country-name {
+      font-weight: 500;
+    }
+    
+    #oecd-ai-map-widget .country-count {
+      background: #667eea;
+      color: white;
+      padding: 5px 15px;
+      border-radius: 20px;
+      font-weight: bold;
+      font-size: 0.9em;
+    }
+    
+    #oecd-ai-map-widget .country-card:hover .country-count {
+      background: white;
+      color: #667eea;
+    }
+  </style>
+
+  <div class="widget-header">
+    <h2>🌍 OECD AI Policy Initiatives</h2>
+    <p>Global Overview by Country</p>
+  </div>
+
+  <div class="widget-content">
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-label">Countries</div>
+        <div class="stat-value">5</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Total Policies</div>
+        <div class="stat-value">300</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Average</div>
+        <div class="stat-value">60</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Highest</div>
+        <div class="stat-value">89</div>
+      </div>
+    </div>
+
+    <h3 style="color: #667eea; margin-bottom: 15px;">Top Countries</h3>
+    
+    <div class="country-grid">
+      <div class="country-card" onclick="alert('United States has 89 AI policy initiatives')">
+        <span class="country-name">United States</span>
+        <span class="country-count">89</span>
+      </div>
+      <div class="country-card" onclick="alert('China has 67 AI policy initiatives')">
+        <span class="country-name">China</span>
+        <span class="country-count">67</span>
+      </div>
+      <div class="country-card" onclick="alert('United Kingdom has 54 AI policy initiatives')">
+        <span class="country-name">United Kingdom</span>
+        <span class="country-count">54</span>
+      </div>
+      <div class="country-card" onclick="alert('Germany has 48 AI policy initiatives')">
+        <span class="country-name">Germany</span>
+        <span class="country-count">48</span>
+      </div>
+      <div class="country-card" onclick="alert('France has 42 AI policy initiatives')">
+        <span class="country-name">France</span>
+        <span class="country-count">42</span>
+      </div>
+    </div>
+    
+    <p style="margin-top: 30px; text-align: center; color: #666; font-size: 0.9em;">
+      Data source: <a href="https://oecd.ai" target="_blank" style="color: #667eea;">OECD.AI Policy Observatory</a>
+    </p>
+  </div>
+</div>
